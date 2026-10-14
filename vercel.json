@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/tai-ung-dung",
+      "destination": "/tai-ung-dung/index.html"
+    },
+    {
+      "source": "/tai-ung-dung/",
+      "destination": "/tai-ung-dung/index.html"
+    }
+  ]
+}

@@ -48,4 +48,12 @@ The supplied R2 manifest originally referenced `https://download.autuna.net/ios/
 
 These links distribute app packages directly. They are not store listings. iOS OTA installation requires a publicly reachable HTTPS site, a suitable signing/provisioning profile and a physical compatible iPhone; localhost shows instructions instead of a broken installation link. Android installation is completed on the user's device through its normal installation prompts. No device installation or signing validity has been verified by this frontend check.
 
-Static hosting must serve `index.html` for `/tai-ung-dung` (SPA fallback) and expose manifest and download files without authentication.
+Static hosting must serve `index.html` for `/tai-ung-dung` (SPA fallback) and expose manifest and download files without authentication. On Vercel, the root `vercel.json` rewrites `/tai-ung-dung` and `/tai-ung-dung/` to the generated `/tai-ung-dung/index.html`. Deploy the repository root with build command `npm run build` and output directory `dist`; a new deployment is required after changing `vercel.json`. These exact rewrites leave assets, APK/IPA download links, the ZIP and manifest paths untouched.
+
+## SEO and site identity
+
+Metadata lives in `src/config/seo.ts`. The Vite configuration injects page-specific title, Vietnamese description, canonical URLs, Open Graph/Twitter tags and JSON-LD into the initial HTML response. The build produces `dist/index.html` and `dist/tai-ung-dung/index.html`, so sharing crawlers can read the correct download-page metadata without running JavaScript. `Seo` keeps metadata consistent in local development.
+
+Canonical site: `https://www.wayo.vn`. Public assets include `robots.txt`, `sitemap.xml` for both pages, SVG/ICO/PNG favicon variants, Apple touch icon and a browser-mode web manifest. The social image uses the real dashboard capture. Structured data describes Wayo, its website and application without invented reviews, ratings or prices.
+
+All heading font sizes (including responsive overrides) have been increased by exactly 2px. Body copy and navigation retain their existing sizes. Deploy a new build to publish the favicon, SEO files and updated typography.

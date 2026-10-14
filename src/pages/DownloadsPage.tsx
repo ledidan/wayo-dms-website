@@ -85,15 +85,6 @@ function StoreNotice({
 
 export function DownloadsPage() {
   const [notice, setNotice] = useState<StorePlatform | null>(null);
-  useEffect(() => {
-    document.title = "Tải ứng dụng Wayo DMS | iOS & Android";
-    document
-      .querySelector('meta[name="description"]')
-      ?.setAttribute(
-        "content",
-        "Tải ứng dụng Wayo DMS cho iPhone và Android. Xem hướng dẫn cài đặt, đăng nhập và kết nối công việc của đội ngũ bán hàng trên điện thoại.",
-      );
-  }, []);
 
   return (
     <>
