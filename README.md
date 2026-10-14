@@ -34,3 +34,4 @@ Reusable Button, Logo, Dashboard, Phone, DemoForm and LegalDialog components. Re
 
 `npm run build` runs TypeScript checks and Vite production bundling. Browser QA covers internal anchors, FAQ, mobile menu and unconfigured form submission. Real backend success/error delivery requires a configured endpoint; authenticated desktop/mobile screenshots have been verified; live demo delivery remains untested.
 # wayo-dms-website
+# wayo-dms-website
