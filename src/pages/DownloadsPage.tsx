@@ -1,14 +1,11 @@
-import { useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
   CheckCircle2,
   Download,
   Smartphone,
-  X,
-  Plus,
 } from "lucide-react";
 import { StoreBadge } from "../components/StoreBadge";
-import { downloads, type StorePlatform } from "../config/downloads";
+import { downloads, getInstallUrl } from "../config/downloads";
 
 const platforms = [
   {
@@ -17,9 +14,9 @@ const platforms = [
     devices: "Dành cho iPhone",
     number: "01",
     description:
-      "Cài đặt Wayo trực tiếp trên iPhone bằng Safari. Phiên bản iOS 1.0.8, dành cho iOS 15.1 trở lên.",
+      `Tải bộ cài iOS gồm IPA và manifest trong một tệp ZIP. Phiên bản ${downloads.iosVersion}, dành cho iOS ${downloads.minimumIOS} trở lên.`,
     instructions:
-      "Mở trang này trong Safari trên iPhone, nhấn banner và xác nhận Cài đặt khi thiết bị hiển thị lời nhắc.",
+      "Nhấn banner để tải wayo-dms-ios.zip. Giải nén để nhận cả hai file wayodms.ipa và manifest.plist.",
   },
   {
     id: "android" as const,
@@ -33,58 +30,8 @@ const platforms = [
   },
 ];
 
-function StoreNotice({
-  platform,
-  onClose,
-}: {
-  platform: StorePlatform;
-  onClose: () => void;
-}) {
-  const dialog = useRef<HTMLDialogElement>(null);
-  const platformName = platform === "ios" ? "iPhone" : "Android";
-  useEffect(() => {
-    dialog.current?.showModal();
-  }, []);
-  return (
-    <dialog
-      ref={dialog}
-      className="legal-modal store-notice"
-      onCancel={onClose}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
-      aria-labelledby="store-notice-title"
-    >
-      <button
-        type="button"
-        autoFocus
-        aria-label="Đóng thông báo"
-        onClick={onClose}
-      >
-        <X />
-      </button>
-      <span className="download-icon">
-        <Download size={24} />
-      </span>
-      <h2 id="store-notice-title">Cài đặt từ website HTTPS</h2>
-      <p>
-        Để cài Wayo trên {platformName}, hãy mở trang tải ứng dụng đã xuất bản
-        qua HTTPS trong Safari trên iPhone. Bản xem trước localhost chưa hỗ trợ
-        cài đặt iOS trực tiếp. Bạn vẫn có thể tải bộ IPA và manifest bên dưới.
-      </p>
-      <a
-        className="button"
-        href={downloads.iosBundle}
-        download="wayo-dms-ios.zip"
-      >
-        Tải IPA + manifest <Download size={16} />
-      </a>
-    </dialog>
-  );
-}
-
 export function DownloadsPage() {
-  const [notice, setNotice] = useState<StorePlatform | null>(null);
+  const iosInstallUrl = getInstallUrl("ios");
 
   return (
     <>
@@ -126,7 +73,7 @@ export function DownloadsPage() {
             <div className="eyebrow">CHỌN PHIÊN BẢN PHÙ HỢP</div>
             <h2 id="platform-heading">Wayo trên điện thoại của bạn.</h2>
           </div>
-          <p>Bấm vào banner để cài iOS hoặc tải APK Android.</p>
+          <p>Bấm vào banner để tải bộ cài iOS hoặc APK Android.</p>
         </div>
         <div className="download-platform-grid">
           {platforms.map((platform) => (
@@ -142,10 +89,7 @@ export function DownloadsPage() {
               <h3>Hệ điều hành {platform.name}</h3>
               <p>{platform.description}</p>
               <div className="store-banner">
-                <StoreBadge
-                  platform={platform.id}
-                  onUnavailable={() => setNotice(platform.id)}
-                />
+                <StoreBadge platform={platform.id} />
               </div>
               <div className="download-card-help">
                 <Download size={17} />
@@ -197,6 +141,11 @@ export function DownloadsPage() {
                   </p>
                 </details>
               )} */}
+              {platform.id === "ios" && iosInstallUrl && (
+                <a className="text-link ios-ota-link" href={iosInstallUrl}>
+                  Cài trực tiếp trên iPhone bằng Safari <ArrowRight size={15} />
+                </a>
+              )}
               <span className="direct-distribution-label">
                 {platform.id === "ios"
                   ? "Bản cài đặt iOS trực tiếp · IPA + manifest"
@@ -235,8 +184,8 @@ export function DownloadsPage() {
                 <div>
                   <h3>Cài đặt ứng dụng</h3>
                   <p>
-                    Trên iPhone, mở bằng Safari và xác nhận cài đặt. Trên
-                    Android, tải APK rồi mở file để cài.
+                    Tải bộ cài phù hợp với điện thoại. Với iOS, có thể dùng
+                    đường dẫn cài trực tiếp bằng Safari; với Android, mở APK để cài.
                   </p>
                 </div>
               </li>
@@ -264,9 +213,6 @@ export function DownloadsPage() {
           </div>
         </div>
       </section>
-      {notice && (
-        <StoreNotice platform={notice} onClose={() => setNotice(null)} />
-      )}
     </>
   );
 }
