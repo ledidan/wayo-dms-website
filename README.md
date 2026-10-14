@@ -35,3 +35,17 @@ Reusable Button, Logo, Dashboard, Phone, DemoForm and LegalDialog components. Re
 `npm run build` runs TypeScript checks and Vite production bundling. Browser QA covers internal anchors, FAQ, mobile menu and unconfigured form submission. Real backend success/error delivery requires a configured endpoint; authenticated desktop/mobile screenshots have been verified; live demo delivery remains untested.
 # wayo-dms-website
 # wayo-dms-website
+
+## Mobile app downloads
+
+`/tai-ung-dung` is linked from the desktop/mobile menu and footer. Banner artwork is saved locally under `public/images/stores/`.
+
+Distribution URLs are maintained in `src/config/downloads.ts`. Android banners link directly to the user-provided R2 APK. iPhone installation uses `itms-services://?action=download-manifest&url=...` with the current published site's HTTPS manifest at `/ios-distribution/manifest.plist`. Optional `VITE_IOS_MANIFEST_URL` overrides this with another HTTPS manifest. Restart/rebuild after changing env configuration.
+
+The supplied R2 manifest originally referenced `https://download.autuna.net/ios/app.ipa`, whose domain did not resolve during verification. The local corrected manifest references the supplied R2 `wayodms.ipa`, bundle ID `com.wayo.dms`, build `8` (version `1.0.8`) and title `WAYO DMS`, matching the IPA's Info.plist. Minimum iOS version in the IPA is 15.1.
+
+`public/downloads/wayo-dms-ios.zip` contains both `wayodms.ipa` and the corrected `manifest.plist` for one-click download. Individual file links are also provided. Refresh the ZIP and manifest metadata when releasing a new IPA.
+
+These links distribute app packages directly. They are not store listings. iOS OTA installation requires a publicly reachable HTTPS site, a suitable signing/provisioning profile and a physical compatible iPhone; localhost shows instructions instead of a broken installation link. Android installation is completed on the user's device through its normal installation prompts. No device installation or signing validity has been verified by this frontend check.
+
+Static hosting must serve `index.html` for `/tai-ung-dung` (SPA fallback) and expose manifest and download files without authentication.
