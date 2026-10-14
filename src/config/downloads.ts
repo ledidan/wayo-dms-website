@@ -11,10 +11,6 @@ export const downloads = {
 
 export type StorePlatform = 'ios' | 'android';
 
-export function getDownloadUrl(platform: StorePlatform): string {
-  return platform === 'ios' ? downloads.iosBundle : downloads.apk;
-}
-
 export function getIOSManifestUrl(): string | null {
   const configured = import.meta.env.VITE_IOS_MANIFEST_URL;
   try {
